@@ -1,7 +1,6 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -56,11 +55,26 @@ public class GameController {
                     int playerIndex = sc.nextInt();
                     flipPlayerMaxCard(playerIndex);
                 }
-
+                
                 flipCount++;
+
+                if (flipCount == 2) {
+                    int num1 = currentFlip.get(0).getNumber();
+                    int num2 = currentFlip.get(1).getNumber();
+                    if (num1 != num2) {
+                        System.out.println("First two cards have different numbers. Turn ends.");
+                        break;
+                    }
+                }
                 if (tryCheckTrio()) {
                     playerCollectTrio(current, getCurrentFlip());
                     break;
+                }
+            }
+
+            for (Card c : currentFlip) {
+                if (c.getSource() >= 0) {
+                   game.getPlayers().get(c.getSource()).getHand().add(c);
                 }
             }
 
@@ -80,19 +94,27 @@ public class GameController {
 
     // 2. Min
     public Card flipPlayerMinCard(int playerIndex) {
-        Card card = game.getPlayers().get(playerIndex).getMinCard();
+    Player player = game.getPlayers().get(playerIndex);
+    Card card = player.getMinCard();
+    if (card != null) {
+        player.getHand().remove(card);
         currentFlip.add(card);
-        System.out.println("Flipped " + game.getPlayers().get(playerIndex).getName() + "'s MIN card: " + card);
-        return card;
+        System.out.println("Flipped " + player.getName() + "'s MIN card: " + card);
     }
+    return card;
+}
 
     // 3. Max
     public Card flipPlayerMaxCard(int playerIndex) {
-        Card card = game.getPlayers().get(playerIndex).getMaxCard();
+    Player player = game.getPlayers().get(playerIndex);
+    Card card = player.getMaxCard();
+    if (card != null) {
+        player.getHand().remove(card);
         currentFlip.add(card);
-        System.out.println("Flipped " + game.getPlayers().get(playerIndex).getName() + "'s MAX card: " + card);
-        return card;
+        System.out.println("Flipped " + player.getName() + "'s MAX card: " + card);
     }
+    return card;
+}
 
     public List<Card> getCurrentFlip() {
         return currentFlip;
@@ -106,11 +128,9 @@ public class GameController {
         if (currentFlip.size() == 3) {
             if (TrioChecker.isBasicTrio(currentFlip)) {
                 System.out.println("Basic TRIO formed!");
-                currentFlip.clear();
                 return true;
             } else {
                 System.out.println("Not a trio. Turn ends.");
-                resetFlip();
                 return false;
             }
         }
@@ -118,31 +138,12 @@ public class GameController {
     }
 
     public void playerCollectTrio(Player collector, List<Card> trioCards) {
-    for (Card card : trioCards) {
-        
-        Iterator<Card> iterator = game.getTableCards().iterator();
-        while (iterator.hasNext()) {
-            Card c = iterator.next();
-            if (c.equals(card)) {
-                iterator.remove();
-                break;
+        for (Card card : trioCards) {
+            game.getTableCards().remove(card);
+            for(Player p : game.getPlayers()) {
+                p.getHand().remove(card);
             }
         }
-
-        for (Player p : game.getPlayers()) {
-            Iterator<Card> handIterator = p.getHand().iterator();
-            while (handIterator.hasNext()) {
-                Card c = handIterator.next();
-                if (c.equals(card)) {
-                    handIterator.remove();
-                    break;
-                }
-            }
-        }
+        collector.collectTrio(trioCards);
     }
-
-    collector.collectTrio(trioCards);
-}
-
-
 }

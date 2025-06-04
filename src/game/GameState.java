@@ -19,7 +19,9 @@ public class GameState {
         for (int i = 0; i < 4; i++) {
             Player p = new Player("Player " + (i + 1));
             for (int j = 0; j < 7; j++) {
-                p.drawCard(deck);
+                Card card = deck.draw();
+                card.setSource(i);
+                p.getHand().add(card);
             }
             p.sortHand(); // 之前你有做手牌排序
             players.add(p);
@@ -28,7 +30,9 @@ public class GameState {
         // Initialize table cards (8 facedown)
         tableCards = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            tableCards.add(deck.draw());
+            Card card = deck.draw();
+            card.setSource(-1);
+            tableCards.add(card);
         }
 
         // Start from Player 1

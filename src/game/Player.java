@@ -16,14 +16,6 @@ public class Player {
         this.completedTrios = new ArrayList<>();
     }
 
-    // Draw a card from the deck to player's hand
-    public void drawCard(Deck deck) {
-        Card card = deck.draw();
-        if (card != null) {
-            hand.add(card);
-        }
-    }
-
     // Get max card number in hand
     public Card getMaxCard() {
         if (hand.isEmpty()) return null;
