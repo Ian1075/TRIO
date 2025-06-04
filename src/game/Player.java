@@ -8,10 +8,12 @@ import java.util.List;
 public class Player {
     private String name;
     private List<Card> hand;
+    private final List<List<Card>> completedTrios;
 
     public Player(String name) {
         this.name = name;
         this.hand = new ArrayList<>();
+        this.completedTrios = new ArrayList<>();
     }
 
     // Draw a card from the deck to player's hand
@@ -57,5 +59,10 @@ public class Player {
 
     public List<Card> getHand() {
         return hand;
+    }
+
+    public void collectTrio(List<Card> cards) {
+        if (cards == null || cards.size() != 3) return;
+        completedTrios.add(new ArrayList<>(cards));
     }
 }

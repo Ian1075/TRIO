@@ -45,18 +45,28 @@ public class GameController {
     }
 
     public boolean tryCheckTrio() {
-    if (currentFlip.size() == 3) {
-        if (TrioChecker.isBasicTrio(currentFlip)) {
-            System.out.println("Basic TRIO formed!");
-            currentFlip.clear();
-            return true;
-        } else {
-            System.out.println("Not a trio. Turn ends.");
-            resetFlip();
-            return false;
+        if (currentFlip.size() == 3) {
+            if (TrioChecker.isBasicTrio(currentFlip)) {
+                System.out.println("Basic TRIO formed!");
+                currentFlip.clear();
+                return true;
+            } else {
+                System.out.println("Not a trio. Turn ends.");
+                resetFlip();
+                return false;
+            }
         }
+        return false;
     }
-    return false;
-}
+
+    public void playerCollectTrio(Player collector, List<Card> trioCards) {
+        for (Card card : trioCards) {
+            gameState.getTableCards().remove(card);
+            for (Player p : gameState.getPlayers()) {
+                p.getHand().remove(card);
+            }
+        }
+        collector.collectTrio(trioCards);
+    }
 
 }

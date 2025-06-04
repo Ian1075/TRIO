@@ -30,6 +30,7 @@ public class Main {
 
             int flipCount = 0;
             while (flipCount < 3) {
+                
                 System.out.println("Flip from: 1.Table  2.Player Min  3.Player Max");
                 int choice = sc.nextInt();
 
@@ -49,13 +50,14 @@ public class Main {
 
                 flipCount++;
                 if (controller.tryCheckTrio()) {
-                    break; // 成功就結束回合
+                    controller.playerCollectTrio(current, controller.getCurrentFlip());
+                    break;
                 }
             }
 
-            controller.resetFlip(); // 如果沒成功三重奏，自動清除
+            controller.resetFlip();
 
-            game.nextPlayer(); // 換人
+            game.nextPlayer();
         }
     }
 }
