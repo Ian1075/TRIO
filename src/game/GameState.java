@@ -44,6 +44,10 @@ public class GameState {
         return players.get(currentPlayerIndex);
     }
 
+    public void nextPlayer() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    }
+    
     public void nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }

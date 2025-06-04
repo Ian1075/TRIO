@@ -43,4 +43,20 @@ public class GameController {
     public void resetFlip() {
         currentFlip.clear();
     }
+
+    public boolean tryCheckTrio() {
+    if (currentFlip.size() == 3) {
+        if (TrioChecker.isBasicTrio(currentFlip)) {
+            System.out.println("Basic TRIO formed!");
+            currentFlip.clear();
+            return true;
+        } else {
+            System.out.println("Not a trio. Turn ends.");
+            resetFlip();
+            return false;
+        }
+    }
+    return false;
+}
+
 }
