@@ -37,10 +37,10 @@ public class Player {
     // Sort the player's hand in ascending order by card number.
     public void sortHand() {
         Collections.sort(hand, Comparator.comparingInt(Card::getNumber));
-        System.out.println("Player's hand sorted:");
-        for (Card c : hand) {
-            System.out.println(c);
-        }
+        //System.out.println("Player's hand sorted:");
+        //for (Card c : hand) {
+        //    System.out.println(c);
+        //}
     }
 
     // Print player's hand cards
