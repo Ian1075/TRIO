@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -116,14 +117,32 @@ public class GameController {
         return false;
     }
 
-    private void playerCollectTrio(Player collector, List<Card> trioCards) {
-        for (Card card : trioCards) {
-            game.removeTableCard(card.getId());
-            for (Player p : game.getPlayers()) {
-                p.removeHandCard(card.getId());
+    public void playerCollectTrio(Player collector, List<Card> trioCards) {
+    for (Card card : trioCards) {
+        
+        Iterator<Card> iterator = game.getTableCards().iterator();
+        while (iterator.hasNext()) {
+            Card c = iterator.next();
+            if (c.equals(card)) {
+                iterator.remove();
+                break;
             }
         }
-        collector.collectTrio(trioCards);
+
+        for (Player p : game.getPlayers()) {
+            Iterator<Card> handIterator = p.getHand().iterator();
+            while (handIterator.hasNext()) {
+                Card c = handIterator.next();
+                if (c.equals(card)) {
+                    handIterator.remove();
+                    break;
+                }
+            }
+        }
     }
+
+    collector.collectTrio(trioCards);
+}
+
 
 }
