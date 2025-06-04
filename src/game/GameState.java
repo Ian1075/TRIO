@@ -51,5 +51,11 @@ public class GameState {
     public void nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
+
+    public void removeTableCard(int id) {
+        for (Card c : tableCards) {
+            if(c.getId() == id) tableCards.remove(c);
+        }
+    }
 }
 

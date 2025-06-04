@@ -65,4 +65,10 @@ public class Player {
         if (cards == null || cards.size() != 3) return;
         completedTrios.add(new ArrayList<>(cards));
     }
+
+    public void removeHandCard(int id) {
+        for (Card c : hand) {
+            if(c.getId() == id) hand.remove(c);
+        }
+    }
 }
