@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Player {
-    private String name;
-    private List<Card> hand;
-    private final List<List<Card>> completedTrios;
+public abstract class Player {
+    private final String name;
+    protected  List<Card> hand;
+    private final List<Integer> completedTrios;
 
     public Player(String name) {
         this.name = name;
@@ -30,11 +30,9 @@ public class Player {
 
     // Sort the player's hand in ascending order by card number.
     public void sortHand() {
-        Collections.sort(hand, Comparator.comparingInt(Card::getNumber));
-        //System.out.println("Player's hand sorted:");
-        //for (Card c : hand) {
-        //    System.out.println(c);
-        //}
+        Collections.sort(hand, Comparator
+        .comparingInt(Card::getNumber)
+        .thenComparingInt(Card::getId));
     }
 
     // Print player's hand cards
@@ -55,6 +53,14 @@ public class Player {
 
     public void collectTrio(List<Card> cards) {
         if (cards == null || cards.size() != 3) return;
-        completedTrios.add(new ArrayList<>(cards));
+        completedTrios.add(cards.get(0).getNumber());
     }
+
+    public List<Integer> getTrio() {
+        return completedTrios;
+    }
+
+    public abstract int[] chooseCardToFlip();
+
+    protected abstract void setGameState(GameState game);
 }

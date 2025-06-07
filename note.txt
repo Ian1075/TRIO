@@ -7,9 +7,10 @@ src/
 │   ├── GameState.java          // 遊戲整體狀態（誰的回合、勝利條件）
 │   ├── GameController.java     // 控制回合流程、翻牌行為、記錄狀態
 │
-├── ai/
-│   ├── AIPlayer.java           // 繼承 Player，加入 AI 翻牌邏輯
-│   └── MemoryModel.java        // AI 記憶策略（簡單可設為 HashMap）
+    ├── players/
+    │   ├── AIPlayer.java           // 繼承 Player，加入 AI 翻牌邏輯
+    │   └── MemoryModel.java        // AI 記憶策略（簡單可設為 HashMap）
+    │   └── User
 │
 ├── ui/
 │   ├── GameFrame.java          // Swing 主框架

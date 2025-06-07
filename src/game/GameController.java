@@ -1,16 +1,13 @@
 package game;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class GameController {
     private GameState game;
-    private List<Card> currentFlip;
 
     public GameController() {
         this.game = new GameState();
-        this.currentFlip = new ArrayList<>();
     }
 
     public void gameStart() {
@@ -27,57 +24,58 @@ public class GameController {
         // Show table cards
         System.out.println("Table cards (facedown):");
         for (int i = 0; i < game.getTableCards().size(); i++) {
-            System.out.println("Position " + i + ": Card{}");
+            System.out.println("Position " + i + ": Card{" + game.getTableCards().get(i).getNumber() + "}");
         }
 
         Scanner sc = new Scanner(System.in);
 
         while (true) {
             Player current = game.getCurrentPlayer();
+            //if(game.getPlayers().indexOf(game.getCurrentPlayer()) != 0) 
             System.out.println("\n=== " + current.getName() + "'s turn ===");
-
+            //System.err.println("\n" + game.getFlippedCards());
             int flipCount = 0;
             while (flipCount < 3) {
+                current.setGameState(game);
                 
-                System.out.println("Flip from: 1.Table  2.Player Min  3.Player Max");
-                int choice = sc.nextInt();
+                int choice[] = current.chooseCardToFlip();
 
-                if (choice == 1) {
-                    System.out.print("Which table card (0-7)? ");
-                    int index = sc.nextInt();
-                    flipTableCard(index);
-                } else if (choice == 2) {
-                    System.out.print("Which player (0-3)? ");
-                    int playerIndex = sc.nextInt();
-                    flipPlayerMinCard(playerIndex);
-                } else if (choice == 3) {
-                    System.out.print("Which player (0-3)? ");
-                    int playerIndex = sc.nextInt();
-                    flipPlayerMaxCard(playerIndex);
+                int type = choice[0];
+                int target = choice[1];
+
+                if (type == -1) {
+                    flipTableCard(target);
+                } else if (target == 1) {
+                    flipPlayerMinCard(type);
+                } else if (target == 2) {
+                    flipPlayerMaxCard(type);
                 }
                 
                 flipCount++;
 
                 if (flipCount == 2) {
-                    int num1 = currentFlip.get(0).getNumber();
-                    int num2 = currentFlip.get(1).getNumber();
+                    int num1 = game.getCurrentFlip().get(0).getNumber();
+                    int num2 = game.getCurrentFlip().get(1).getNumber();
                     if (num1 != num2) {
                         System.out.println("First two cards have different numbers. Turn ends.");
                         break;
                     }
                 }
                 if (tryCheckTrio()) {
-                    playerCollectTrio(current, getCurrentFlip());
+                    playerCollectTrio(current, game.getCurrentFlip());
                     break;
                 }
             }
 
-            for (Card c : currentFlip) {
+            for (Card c : game.getCurrentFlip()) {
                 if (c.getSource() >= 0) {
                    game.getPlayers().get(c.getSource()).getHand().add(c);
                 }
             }
-
+            if(TrioChecker.hasWinningCondition(current.getTrio())) {
+                System.out.println(current.getName() + " Wins");
+                break;
+            }
             resetFlip();
 
             game.nextPlayer();
@@ -87,7 +85,8 @@ public class GameController {
     // 1. From Table（ index）
     public Card flipTableCard(int index) {
         Card card = game.getTableCards().get(index);
-        currentFlip.add(card);
+        game.getCurrentFlip().add(card);
+        game.addFlippedCard(card);
         System.out.println("Flipped table card: " + card);
         return card;
     }
@@ -98,7 +97,8 @@ public class GameController {
     Card card = player.getMinCard();
     if (card != null) {
         player.getHand().remove(card);
-        currentFlip.add(card);
+        game.getCurrentFlip().add(card);
+        game.addFlippedCard(card);
         System.out.println("Flipped " + player.getName() + "'s MIN card: " + card);
     }
     return card;
@@ -110,23 +110,20 @@ public class GameController {
     Card card = player.getMaxCard();
     if (card != null) {
         player.getHand().remove(card);
-        currentFlip.add(card);
+        game.getCurrentFlip().add(card);
+        game.addFlippedCard(card);
         System.out.println("Flipped " + player.getName() + "'s MAX card: " + card);
     }
     return card;
 }
 
-    public List<Card> getCurrentFlip() {
-        return currentFlip;
-    }
-
     public void resetFlip() {
-        currentFlip.clear();
+        game.getCurrentFlip().clear();
     }
 
     public boolean tryCheckTrio() {
-        if (currentFlip.size() == 3) {
-            if (TrioChecker.isBasicTrio(currentFlip)) {
+        if (game.getCurrentFlip().size() == 3) {
+            if (TrioChecker.isBasicTrio(game.getCurrentFlip())) {
                 System.out.println("Basic TRIO formed!");
                 return true;
             } else {
@@ -144,6 +141,7 @@ public class GameController {
                 p.getHand().remove(card);
             }
         }
+        game.removeFlippedCards(trioCards);
         collector.collectTrio(trioCards);
     }
 }
