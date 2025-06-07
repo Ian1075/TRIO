@@ -1,7 +1,7 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class GameController {
     private GameState game;
@@ -27,9 +27,8 @@ public class GameController {
             System.out.println("Position " + i + ": Card{" + game.getTableCards().get(i).getNumber() + "}");
         }
 
-        Scanner sc = new Scanner(System.in);
-
         while (true) {
+            List<Card> tmp = new ArrayList<>(game.getTableCards());
             Player current = game.getCurrentPlayer();
             //if(game.getPlayers().indexOf(game.getCurrentPlayer()) != 0) 
             System.out.println("\n=== " + current.getName() + "'s turn ===");
@@ -66,7 +65,7 @@ public class GameController {
                     break;
                 }
             }
-
+            game.setTableCards(tmp);
             for (Card c : game.getCurrentFlip()) {
                 if (c.getSource() >= 0) {
                    game.getPlayers().get(c.getSource()).getHand().add(c);
@@ -85,6 +84,7 @@ public class GameController {
     // 1. From Table（ index）
     public Card flipTableCard(int index) {
         Card card = game.getTableCards().get(index);
+        game.getTableCards().remove(card);
         game.getCurrentFlip().add(card);
         game.addFlippedCard(card);
         System.out.println("Flipped table card: " + card);

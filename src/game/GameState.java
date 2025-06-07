@@ -94,5 +94,9 @@ public class GameState {
     public List<Card> getCurrentFlip() {
         return currentFlip;
     }
+
+    public void setTableCards(List<Card> list) {
+        tableCards = list;
+    }
 }
 
