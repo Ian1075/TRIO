@@ -16,7 +16,7 @@ public class User extends Player {
         int type = sc.nextInt();
 
         int target;
-        if (type == 1) {
+        if (type == -1) {
             System.out.print("Which table card (0-7)?");
             target = sc.nextInt();
         } else {
@@ -29,6 +29,5 @@ public class User extends Player {
 
     @Override
     protected void setGameState(GameState game) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

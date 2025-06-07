@@ -143,5 +143,6 @@ public class GameController {
         }
         game.removeFlippedCards(trioCards);
         collector.collectTrio(trioCards);
+        resetFlip();
     }
 }

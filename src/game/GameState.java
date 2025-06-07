@@ -21,15 +21,15 @@ public class GameState {
         // Initialize players
         players = new ArrayList<>();
         // 加入使用者
-        /*
-        User user = new User("You");
+        
+       /*  User user = new User("You");
         for (int j = 0; j < 7; j++) {
             Card card = deck.draw();
             card.setSource(0);  // user 是第 0 位
             user.getHand().add(card);
         }
         user.sortHand();
-        players.add(user);*/
+        players.add(user); */
 
         // 加入三個 AI
         for (int i = 0; i < 4; i++) {

@@ -46,6 +46,7 @@ public class AIPlayer extends Player{
 
                     switch(flip1(c1)) {
                         case 3:
+                        undoMap(c1);
                             result[0] = c1.getSource();
                             if(result[0] == -1) {
                                 result[1] = all.get(-1).indexOf(c1);
@@ -83,6 +84,7 @@ public class AIPlayer extends Player{
                     currentFlip.add(c2);
                     switch(flip2(c2, currentFlip.get(0))) {
                         case 3:
+                        undoMap(c2);
                             result[0] = c2.getSource();
                             if(result[0] == -1) {
                                 result[1] = all.get(-1).indexOf(c2);
