@@ -22,7 +22,6 @@ public class AIPlayer extends Player{
     
     public int[] chooseCardToFlip() {
         int[] result = {0,0};
-        Card chosenCard;
         all = new HashMap<>();
         all.put(0, new ArrayList<>(game.getPlayers().get(0).getHand()));
         all.put(1, new ArrayList<>(game.getPlayers().get(1).getHand()));
@@ -72,13 +71,11 @@ public class AIPlayer extends Player{
                 }
                 for(Card cCase2 : case2){
                     if(winable(cCase2)){
-                        chosenCard = guessUnknownCard(cCase2.getNumber()>7);
-                        result = toResult(chosenCard);
+                        result = toResult(guessUnknownCard(cCase2.getNumber()>7));
                         return result;
                     } 
                 }
-                chosenCard = guessUnknownCard((int)Math.random()*2 == 1 ? true : false);
-                result = toResult(chosenCard);
+                result = toResult(guessUnknownCard((int)Math.random()*2 == 1 ? true : false));
                 return result;
             case 1:
                 for(Card c2 : getKnownAndFlipable()) {
@@ -100,26 +97,22 @@ public class AIPlayer extends Player{
                             return result;
 
                         case 2:
-                            chosenCard = guessUnknownCard(c2.getNumber()>7);
-                            result = toResult(chosenCard);
+                            result = toResult( guessUnknownCard(c2.getNumber()>7));
                             return result;
                     }
                 }
                 
-                chosenCard = getKnownAndFlipable().get((int)(Math.random() * getKnownAndFlipable().size()));
-                result = toResult(chosenCard);
+                result = toResult(getKnownAndFlipable().get((int)(Math.random() * getKnownAndFlipable().size())));
                 return result;
 
             case 2:
                 for(Card c3 : getKnownAndFlipable()) {
                     if(flip3(c3, currentFlip.get(1))) {
-                        chosenCard = c3;
-                        result = toResult(chosenCard);
+                        result = toResult(c3);
                         return result;
                     }
                 }
-                chosenCard = guessUnknownCard(currentFlip.get(1).getNumber()>7);
-                result = toResult(chosenCard);
+                result = toResult(guessUnknownCard(currentFlip.get(1).getNumber()>7));
                 return result;
         }
         result[0] = -1;
