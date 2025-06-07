@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
-    private GameState game;
+    private final GameState game;
 
     public GameController() {
         this.game = new GameState();
