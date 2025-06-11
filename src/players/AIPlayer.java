@@ -34,7 +34,6 @@ public class AIPlayer extends Player{
         for(Card c : hand) {
             if(!known.contains(c)) known.add(c);
         }
-        //System.out.println(known);
         currentFlip = new ArrayList<>(game.getCurrentFlip());
 
         switch(currentFlip.size()) {
@@ -104,7 +103,7 @@ public class AIPlayer extends Player{
                     }
                 }
                 
-                result = toResult(getKnownAndFlipable().get((int)(Math.random() * getKnownAndFlipable().size())));
+                result = toResult(guessUnknownCard((int)Math.random()*2 == 1));
                 return result;
 
             case 2:
