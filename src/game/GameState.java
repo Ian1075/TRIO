@@ -2,6 +2,7 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 import players.AIPlayer;
+import players.User;
 
 
 // GameState.java
@@ -20,23 +21,23 @@ public class GameState {
 
         // Initialize players
         players = new ArrayList<>();
-        // 加入使用者
+        // User
         
-       /*  User user = new User("You");
+        User user = new User("You");
         for (int j = 0; j < 7; j++) {
             Card card = deck.draw();
-            card.setSource(0);  // user 是第 0 位
+            card.setSource(0);  // user = 0 
             user.getHand().add(card);
         }
         user.sortHand();
-        players.add(user); */
+        players.add(user);
 
-        // 加入三個 AI
-        for (int i = 0; i < 4; i++) {
+        // AI
+        for (int i = 1; i < 4; i++) {
             AIPlayer ai = new AIPlayer("AI " + i);
             for (int j = 0; j < 7; j++) {
                 Card card = deck.draw();
-                card.setSource(i);  // source 對應 player index
+                card.setSource(i);  // source: player index
                 ai.getHand().add(card);
             }
             ai.sortHand();

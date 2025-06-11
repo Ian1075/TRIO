@@ -210,7 +210,7 @@ public class AIPlayer extends Player{
         .thenComparingInt(Card::getId));
     }
 
-        private boolean winable(Card c) {
+    private boolean winable(Card c) {
         List<Integer> list = new ArrayList<>(getTrio());
         list.add(c.getNumber());
         if((list.contains(1) && list.contains(6))
