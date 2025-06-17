@@ -62,5 +62,5 @@ public abstract class Player {
 
     public abstract int[] chooseCardToFlip();
 
-    protected abstract void setGameState(GameState game);
+    public abstract void setGameState(GameState game);
 }

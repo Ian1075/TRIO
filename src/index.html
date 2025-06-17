@@ -3,34 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <title>Card Game</title>
+    <!-- index.html -->
+    <!-- in index.html -->
     <style>
-        body { font-family: sans-serif; }
-        .container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-        .card { border: 1px solid black; padding: 10px 15px; border-radius: 5px; cursor: pointer; background-color: #f0f0f0; }
-        .card:hover { background-color: #e0e0e0; }
-        .card.face-down { background-color: #a0a0ff; }
-        .player-hand { border: 2px solid #ccc; padding: 10px; width: 100%; }
+        body { font-family: sans-serif; transition: background-color 0.5s; }
+        .container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; align-items: center; }
+        
+        .card { 
+            border: 1px solid black; 
+            padding: 10px 15px; 
+            border-radius: 5px; 
+            background-color: #f0f0f0; 
+            transition: opacity 0.3s, background-color 0.3s;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .card.actionable {
+            cursor: pointer;
+            border-color: #007bff;
+            border-width: 2px;
+        }
+        .card.actionable:hover { 
+            background-color: #e0e0e0;
+            border-color: #0056b3;
+        }
+        
+        .card.face-down { 
+            background-color: #a0a0ff;
+            border-color: #6c757d;
+        }
+        .card.placeholder {
+            background-color: #f8f9fa;
+            border-style: dashed;
+            color: #6c757d;
+        }
+
+        .player-section {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+        }
+
+        .player-section.is-human-player {
+            background-color: #e8f5e9; /* Give the human player a different background */
+        }
+
         #game-info { font-size: 1.2em; font-weight: bold; }
+
+        #game-log-container {
+        background-color: #fffbe6; /* Light yellow background */
+        border: 1px solid #ffeeba;
+        padding: 5px 15px;
+        border-radius: 5px;
+        margin-top: 15px;
+        }
+
+        #last-move-text {
+            font-style: italic;
+            color: #555;
+        }
+        /* in index.html, inside <style> */
+
+        #game-over-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+        }
+
+        #restart-button {
+            font-size: 1.5em;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            background-color: #fff;
+            color: #007bff;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        #restart-button:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
     </style>
 </head>
+<!-- in index.html -->
 <body>
     <h1>Card Game</h1>
 
     <div id="game-info">
-        <p>Current Player: <span id="current-player-name">Loading...</span></p>
-        <p>Your Hand (Player 0):</p>
-        <div id="player0-hand" class="container"></div>
+        <p>Current turn: <span id="current-player-name">Loading...</span></p>
+    </div>
+
+    <!-- NEW: Game Log Section -->
+    <div id="game-log-container">
+        <h3>Last Move</h3>
+        <p id="last-move-text">Game has just started.</p>
     </div>
     
     <hr>
-
-    <h2>Other Players</h2>
-    <div id="other-players"></div>
-
-    <hr>
     
     <h2>Table Cards</h2>
-    <div id="table-cards" class="container"></div>
+    <div id="table-cards" class="container">
+        <!-- Table cards will be rendered here -->
+    </div>
+
+    <hr>
+
+    <h2>Players</h2>
+    <div id="players-container">
+        <!-- All player sections will be rendered here -->
+    </div>
 
     <script src="/game.js"></script>
 </body>

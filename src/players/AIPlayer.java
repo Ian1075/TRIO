@@ -271,6 +271,7 @@ public class AIPlayer extends Player{
         return result;
     }
 
+    @Override
     public void setGameState(GameState game) {
         this.game = game;
     }

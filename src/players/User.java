@@ -29,6 +29,6 @@ public class User extends Player {
     }
 
     @Override
-    protected void setGameState(GameState game) {
+    public void setGameState(GameState game) {
     }
 }

@@ -12,6 +12,8 @@ public class GameState {
     private int currentPlayerIndex;
     private Deck deck;
     private List<Card> currentFlip;
+    public Player winner = null;
+     public String lastMoveDescription = "Game Started"; 
 
     private List<Card> flippedCards = new ArrayList<>();
 
