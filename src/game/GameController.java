@@ -81,7 +81,7 @@ public class GameController {
         }
     }
 
-    // 1. From Table（ index）
+    // 1. From Table
     public Card flipTableCard(int index) {
         Card card = game.getTableCards().get(index);
         game.getTableCards().remove(card);

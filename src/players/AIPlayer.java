@@ -20,6 +20,7 @@ public class AIPlayer extends Player{
         super(name);
     }
     
+    @Override
     public int[] chooseCardToFlip() {
         int[] result = {0,0};
         all = new HashMap<>();
@@ -37,15 +38,15 @@ public class AIPlayer extends Player{
         currentFlip = new ArrayList<>(game.getCurrentFlip());
 
         switch(currentFlip.size()) {
-            case 0:
+            case 0 -> {
                 List<Card> case2 = new ArrayList<>();
                 for(Card c1 : getKnownAndFlipable()) {
                     updateMap(c1);
                     currentFlip.add(c1);
 
                     switch(flip1(c1)) {
-                        case 3:
-                        undoMap(c1);
+                        case 3 -> {
+                            undoMap(c1);
                             result[0] = c1.getSource();
                             if(result[0] == -1) {
                                 result[1] = all.get(-1).indexOf(c1);
@@ -58,13 +59,12 @@ public class AIPlayer extends Player{
                             }
                 
                             return result;
+                        }
                         
-                        case 2:
-                            case2.add(c1);
-                            break;
+                        case 2 -> case2.add(c1);
 
-                        default:
-                            break;
+                        default -> {
+                        }
                     }
                     undoMap(c1);
                     currentFlip.remove(c1);
@@ -75,15 +75,16 @@ public class AIPlayer extends Player{
                         return result;
                     } 
                 }
-                result = toResult(guessUnknownCard((int)Math.random()*2 == 1 ? true : false));
+                result = toResult(guessUnknownCard(Math.random()*2 == 1));
                 return result;
-            case 1:
+            }
+            case 1 -> {
                 for(Card c2 : getKnownAndFlipable()) {
                     updateMap(c2);
                     currentFlip.add(c2);
                     switch(flip2(c2, currentFlip.get(0))) {
-                        case 3:
-                        undoMap(c2);
+                        case 3 -> {
+                            undoMap(c2);
                             result[0] = c2.getSource();
                             if(result[0] == -1) {
                                 result[1] = all.get(-1).indexOf(c2);
@@ -96,17 +97,20 @@ public class AIPlayer extends Player{
                             }
                 
                             return result;
+                        }
 
-                        case 2:
+                        case 2 -> {
                             result = toResult( guessUnknownCard(c2.getNumber()>7));
                             return result;
+                        }
                     }
                 }
                 
-                result = toResult(guessUnknownCard((int)Math.random()*2 == 1));
+                result = toResult(guessUnknownCard(Math.random()*2 == 1));
                 return result;
+            }
 
-            case 2:
+            case 2 -> {
                 for(Card c3 : getKnownAndFlipable()) {
                     if(flip3(c3, currentFlip.get(1))) {
                         result = toResult(c3);
@@ -115,6 +119,7 @@ public class AIPlayer extends Player{
                 }
                 result = toResult(guessUnknownCard(currentFlip.get(1).getNumber()>7));
                 return result;
+            }
         }
         result[0] = -1;
         result[1] = (int)Math.random() * game.getTableCards().size();

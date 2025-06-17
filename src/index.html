@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Card Game</title>
+    <style>
+        body { font-family: sans-serif; }
+        .container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .card { border: 1px solid black; padding: 10px 15px; border-radius: 5px; cursor: pointer; background-color: #f0f0f0; }
+        .card:hover { background-color: #e0e0e0; }
+        .card.face-down { background-color: #a0a0ff; }
+        .player-hand { border: 2px solid #ccc; padding: 10px; width: 100%; }
+        #game-info { font-size: 1.2em; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Card Game</h1>
+
+    <div id="game-info">
+        <p>Current Player: <span id="current-player-name">Loading...</span></p>
+        <p>Your Hand (Player 0):</p>
+        <div id="player0-hand" class="container"></div>
+    </div>
+    
+    <hr>
+
+    <h2>Other Players</h2>
+    <div id="other-players"></div>
+
+    <hr>
+    
+    <h2>Table Cards</h2>
+    <div id="table-cards" class="container"></div>
+
+    <script src="/game.js"></script>
+</body>
+</html>

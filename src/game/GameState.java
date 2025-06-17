@@ -22,7 +22,6 @@ public class GameState {
         // Initialize players
         players = new ArrayList<>();
         // User
-        
         User user = new User("You");
         for (int j = 0; j < 7; j++) {
             Card card = deck.draw();
@@ -31,7 +30,6 @@ public class GameState {
         }
         user.sortHand();
         players.add(user);
-
         // AI
         for (int i = 1; i < 4; i++) {
             AIPlayer ai = new AIPlayer("AI " + i);
