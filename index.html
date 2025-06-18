@@ -6,13 +6,15 @@
     <!-- index.html -->
     <!-- in index.html -->
     <style>
+        /* --- General Body and Font Styles --- */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
         body { 
             font-family: 'Poppins', sans-serif;
             
-            /* --- NEW: Set background image --- */
-            background-image: url('/images/background.jpg');
+            /* --- Set background image --- */
+            /* IMPORTANT: Change 'background.jpg' to your actual background image file name if it's different */
+            background-image: url('/images/background.png');
             background-size: cover; /* Make the image cover the entire screen */
             background-position: center;
             background-attachment: fixed; /* Keep the background fixed while scrolling */
@@ -20,221 +22,196 @@
             color: #333;
             margin: 0;
             padding: 24px;
-            transition: background-color 0.5s; 
         }
-    
+
+        /* --- General Headers --- */
         h1, h2, h3 {
             text-align: center;
             color: #343a40;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.4); /* Add a light text shadow for readability */
         }
-    
-        hr {
-            border: 0;
-            height: 1px;
-            background: #dee2e6;
-            margin: 30px 0;
+        h2 {
+            color: #f8f9fa;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 8px;
         }
-    
-        /* Main Container for Centering Content */
+        hr { display: none; }
+
+        /* --- General Purpose Container --- */
         .container { 
             display: flex; 
             flex-wrap: wrap; 
-            gap: 10px; 
+            gap: 16px; /* A bit more space */
             margin-bottom: 10px; 
             justify-content: center; 
             align-items: center; 
         }
-    
-        /* Card Base Styles */
+
+        /* --- Base Card Styles (The Foundation for All Cards) --- */
         .card { 
-            border: 1px solid #adb5bd; 
-            padding: 10px 15px; 
-            border-radius: 8px; 
-            background-color: #f0f0f0; 
-            transition: opacity 0.3s, background-color 0.3s, transform 0.2s, border-color 0.2s;
-            min-width: 80px;
-            text-align: center;
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            background-color: transparent; /* No background color, we use images */
+            transition: all 0.2s ease-in-out;
+            
+            /* Fixed size for all cards for a uniform look */
+            width: 100px;
+            height: 140px;
+
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            
+            /* Image settings */
+            background-size: contain; /* 'contain' ensures the whole image fits */
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* Hide text content, we only want to see the image */
+            color: transparent;
+            font-size: 0;
+            border: none; /* No border, let the image define the edge */
         }
         
-        /* Actionable Cards (Buttons, etc.) */
+        /* --- Actionable Cards (Anything that can be clicked) --- */
         .card.actionable {
             cursor: pointer;
-            border-color: #007bff;
-            border-width: 2px;
         }
         .card.actionable:hover { 
-            background-color: #e9ecef;
-            border-color: #0056b3;
-            transform: translateY(-2px); /* Slight lift effect on hover */
+            transform: translateY(-5px) scale(1.08); /* Lift and grow effect */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
         
+        /* Style for the back of the cards */
         .card.face-down { 
-            background-color: #6c757d;
-            border-color: #5a6268;
-            color: white;
+            background-image: url('/images/card-back.png');
         }
-        .card.face-down:hover {
-            background-color: #5a6268;
-        }
-    
-        /* Player Section Styles */
-        .player-section {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 15px 20px;
-            margin: 10px auto; /* Reduced margin */
-            width: 90%; /* Increased width for more space */
-            max-width: 900px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            /* Make the section itself a flex container to align its children (title, hand) */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-    
-        .player-section.is-human-player {
-            background-color: #e8f5e9;
-            border-color: #c8e6c9;
-        }
-    
-        /* Hand Display Styles */
-        .hand-display {
-            display: flex;
-            width: 100%;
-            justify-content: space-between; /* The magic for alignment */
-            align-items: center;
-            gap: 10px;
-            min-height: 50px;
-        }
-    
-        .hand-display.is-human-player-hand {
-            justify-content: space-between; /* The magic for alignment */
-            width: 100%;
-        }
-    
-        /* Non-interactive cards in the human player's hand */
-        .hand-display .card {
-            cursor: default;
-            background-color: #fff;
-            border-color: #6c757d;
-            transform: none; /* No hover effect for these cards */
-        }
+        
+        /* --- Player Section Styles --- */
+        .player-section, #game-info, #game-log-container {
+            /* Semi-transparent "frosted glass" effect for readability */
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px); /* For Safari compatibility */
 
-        .hand-content {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            /* This will grow to take up available space in the middle */
-            flex-grow: 1; 
-        }
-
-        /* Non-interactive cards in the human player's hand */
-        .hand-content .card {
-            cursor: default;
-            background-color: #fff;
-            border-color: #6c757d;
-            transform: none; /* No hover effect for these cards */
-        }
-    
-        /* Human player's action buttons */
-        .player-section .player-button {
-            background-color: #28a745; /* Green background */
-            color: #000000;            /* MAKE THE TEXT WHITE for better contrast */
-            border-color: #218838;     /* Darker green border */
-            font-weight: 600;          /* Make text a bit bolder */
-        }
-
-        /* Also use a more specific selector for the hover state */
-        .player-section .player-button:hover {
-            background-color: #218838 !important; /* Darker green on hover */
-            color: #000000 !important;            /* EXPLICITLY keep the text white on hover */
-            border-color: #1c7430 !important;
-        }
-    
-        /* Game Info and Log Styles */
-        #game-info { 
-            font-size: 1.2em; 
-            font-weight: bold; 
-            text-align: center;
-        }
-    
-        #game-log-container {
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            padding: 10px 20px;
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            padding: 20px 24px;
             margin: 20px auto;
-            width: 80%;
+            width: 90%;
             max-width: 900px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-    
-        #last-move-text {
-            font-style: italic;
-            color: #555;
-            text-align: center;
-            margin: 5px 0;
+        
+        .player-section.is-human-player {
+            background-color: rgba(232, 245, 255, 0.85); /* Light blue tint for human player */
+            border-color: rgba(179, 217, 255, 0.6);
         }
-    
-        /* Game Over Screen Styles */
+        
+        .hand-display {
+        display: flex;           /* CRITICAL: Makes children (cards) align horizontally */
+        justify-content: center; /* Centers the group of cards */
+        align-items: center;     /* Vertically aligns cards nicely */
+        min-height: 150px;
+        padding: 10px 0;
+    }
+        .hand-display .card {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: default;
+            /* We add a transition here for the hover effect */
+            transition: transform 0.2s ease-out;
+        }
+        /* This is the key to the "lift on hover" effect */
+        .hand-display .card:hover {
+            transform: translateY(-20px); /* Lifts the card UPWARD on hover */
+            z-index: 100;                 /* Ensures the hovered card is on top of its siblings */
+        }
+
+        /* --- Action Buttons (Now separate from cards) --- */
+        .action-buttons-container {
+            margin-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 15px;
+        }
+
+        .action-button {
+            width: auto;
+            height: auto;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: 600;
+            color: white; /* Make text visible on buttons again */
+            border-radius: 50px; /* Pill shape */
+            border: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .action-button.min-button { background-color: #1877f2; } /* Blue for MIN */
+        .action-button.max-button { background-color: #dc3545; } /* Red for MAX */
+        
+        /* --- Game Info and Log Styles --- */
+        #game-info { font-weight: 600; font-size: 1.2em; }
+        #last-move-text { font-style: italic; color: #333; margin: 5px 0; }
+
+        /* --- Game Over Screen Styles --- */
         #game-over-screen {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 80vh;
-            text-align: center;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+            color: white;
         }
-    
+
         #restart-button {
             font-size: 1.5em;
-            padding: 15px 30px;
+            font-weight: 600;
+            padding: 16px 32px;
             cursor: pointer;
-            border-radius: 8px;
-            border: 2px solid #007bff;
-            background-color: #fff;
-            color: #007bff;
-            transition: background-color 0.2s, color 0.2s;
-            margin-top: 20px;
+            border-radius: 50px;
+            border: none;
+            background-color: #ffffff;
+            color: #1877f2;
+            transition: all 0.2s ease-in-out;
         }
-    
+
         #restart-button:hover {
-            background-color: #007bff;
-            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
-<!-- in index.html -->
-<body>
-    <h1>Card Game</h1>
+    <!-- in index.html -->
+    <body>
+        <h1>Card Game</h1>
 
-    <div id="game-info">
-        <p>Current turn: <span id="current-player-name">Loading...</span></p>
-    </div>
+        <div id="game-info">
+            <p>Current turn: <span id="current-player-name">Loading...</span></p>
+        </div>
 
-    <!-- NEW: Game Log Section -->
-    <div id="game-log-container">
-        <h3>Last Move</h3>
-        <p id="last-move-text">Game has just started.</p>
-    </div>
-    
-    <hr>
-    
-    <h2>Table Cards</h2>
-    <div id="table-cards" class="container">
-        <!-- Table cards will be rendered here -->
-    </div>
+        <!-- NEW: Game Log Section -->
+        <div id="game-log-container">
+            <h3>Last Move</h3>
+            <p id="last-move-text">Game has just started.</p>
+        </div>
+        
+        <hr>
+        
+        <h2>Table Cards</h2>
+        <div id="table-cards" class="container">
+            <!-- Table cards will be rendered here -->
+        </div>
 
-    <hr>
+        <hr>
 
-    <h2>Players</h2>
-    <div id="players-container">
-        <!-- All player sections will be rendered here -->
-    </div>
+        <h2>Players</h2>
+        <div id="players-container">
+            <!-- All player sections will be rendered here -->
+        </div>
 
-    <script src="/game.js"></script>
-</body>
+        <script src="/game.js"></script>
+    </body>
 </html>

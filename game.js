@@ -155,6 +155,8 @@ function updateUI(gameState) {
 
 // in game.js
 
+// in game.js
+
 function createPlayerSection(player, playerIndex) {
     const section = document.createElement('div');
     section.className = 'player-section';
@@ -163,7 +165,7 @@ function createPlayerSection(player, playerIndex) {
     title.textContent = player.name;
     section.appendChild(title);
     
-    // This is the main flex container for the row: <MIN> <CONTENT> <MAX>
+    // Container for the visual hand display
     const handDisplayContainer = document.createElement('div');
     handDisplayContainer.className = 'hand-display'; 
     section.appendChild(handDisplayContainer);
@@ -173,72 +175,90 @@ function createPlayerSection(player, playerIndex) {
         return section;
     }
 
-    // --- Create the three parts of the layout ---
-    const minCard = player.hand[0];
-    const maxCard = player.hand[player.hand.length - 1];
-
-    // Part 1: The MIN button (always exists if hand is not empty)
-    const minButton = createCardDiv(minCard, (playerIndex === 0 ? 'player-action' : 'ai-action'), playerIndex, 1);
-
-    // Part 2: The middle content (either hand cards or AI info)
-    const middleContent = document.createElement('div');
-    middleContent.className = 'hand-content';
-
-    if (playerIndex === 0) {
-        // Human player: Show all cards in the middle
+    if (playerIndex === 0) { // Human player
         section.classList.add('is-human-player');
+        
         player.hand.forEach(card => {
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card';
-            cardDiv.textContent = `${card.number}`;
-            middleContent.appendChild(cardDiv);
+            // Set the background image for the card front
+            cardDiv.style.backgroundImage = `url('/images/card-${card.number}.png')`;
+            handDisplayContainer.appendChild(cardDiv);
         });
-    } else {
-        // AI player: Show card count in the middle
-        const aiInfo = document.createElement('span');
-        aiInfo.textContent = `(${player.hand.length} cards in hand)`;
-        middleContent.appendChild(aiInfo);
+
+        // Container for action buttons, separate from the hand
+        const actionContainer = document.createElement('div');
+        actionContainer.className = 'action-buttons-container';
+        
+        const minCard = player.hand[0];
+        const maxCard = player.hand[player.hand.length - 1];
+        const minButton = createCardDiv(minCard, 'player-action', playerIndex, 1);
+        actionContainer.appendChild(minButton);
+
+        if (player.hand.length > 1) {
+            const maxButton = createCardDiv(maxCard, 'player-action', playerIndex, 2);
+            actionContainer.appendChild(maxButton);
+        }
+        section.appendChild(actionContainer);
+        
+    } else { // AI player
+        title.textContent += ` (${player.hand.length} cards)`;
+        for(let i = 0; i < player.hand.length; i++) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card card-back'; // All AI cards show the back
+            // Overlap them slightly for a fanned-out look
+            cardDiv.style.marginLeft = (i > 0) ? '-60px' : '0';
+            handDisplayContainer.appendChild(cardDiv);
+        }
+        
+        // AI action buttons (optional, could be removed for cleaner look)
+        const actionContainer = document.createElement('div');
+        actionContainer.className = 'action-buttons-container';
+        const minButton = createCardDiv(null, 'ai-action', playerIndex, 1);
+        const maxButton = createCardDiv(null, 'ai-action', playerIndex, 2);
+        actionContainer.appendChild(minButton);
+        if (player.hand.length > 1) {
+           actionContainer.appendChild(maxButton);
+        }
+        section.appendChild(actionContainer);
     }
-
-    // Part 3: The MAX button (only exists if there's more than one card)
-    let maxButton = null;
-    if (player.hand.length > 1) {
-        maxButton = createCardDiv(maxCard, (playerIndex === 0 ? 'player-action' : 'ai-action'), playerIndex, 2);
-    } else {
-        // Create an empty placeholder to maintain the space-between layout
-        maxButton = document.createElement('div');
-        maxButton.style.width = minButton.style.minWidth || '80px'; // Match width of min button
-    }
-
-    // --- Assemble the layout: MIN, CONTENT, MAX ---
-    handDisplayContainer.appendChild(minButton);
-    handDisplayContainer.appendChild(middleContent);
-    handDisplayContainer.appendChild(maxButton);
-
     return section;
 }
 
+// in game.js
+
 function createCardDiv(card, type, source, choice) {
     const div = document.createElement('div');
-    div.className = 'card';
+    div.className = 'card'; // Base class for card look
+
     switch (type) {
         case 'table':
-            div.textContent = `Pos: ${choice}`; 
-            div.className += ' actionable face-down';
+            div.classList.add('actionable', 'face-down');
             div.onclick = () => performPlayerAction(source, choice);
             break;
+        
         case 'player-action':
-            div.className += ' actionable player-button';
-            if (choice === 1) {
-                div.textContent = `Flip My MIN (${card.number})`;
-            } else {
-                div.textContent = `Flip My MAX (${card.number})`;
+            // These are now separate buttons, not cards.
+            div.className = 'actionable action-button'; // Use new button classes
+            if (choice === 1) { // MIN
+                div.classList.add('min-button');
+                div.textContent = `Flip My MIN`;
+            } else { // MAX
+                div.classList.add('max-button');
+                div.textContent = `Flip My MAX`;
             }
             div.onclick = () => performPlayerAction(source, choice);
             break;
+            
         case 'ai-action':
-            div.className += ' actionable';
-            div.textContent = (choice === 1) ? `Flip MIN` : `Flip MAX`;
+            div.className = 'actionable action-button';
+             if (choice === 1) { // MIN
+                div.classList.add('min-button');
+                div.textContent = `Flip MIN`;
+            } else { // MAX
+                div.classList.add('max-button');
+                div.textContent = `Flip MAX`;
+            }
             div.onclick = () => performPlayerAction(source, choice);
             break;
     }
