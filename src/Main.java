@@ -124,7 +124,7 @@ public class Main {
             }
         }
 
-        private void handlePlayerAction(int source, int choice) {
+        private void handlePlayerAction(int source, int choice) throws InterruptedException {
             flipCard(source, choice);
             if (gameState.getCurrentFlip().size() == 2) {
                 Card c1 = gameState.getCurrentFlip().get(0);
@@ -140,7 +140,7 @@ public class Main {
             }
         }
 
-        private void handleAiStep() {
+        private void handleAiStep() throws InterruptedException {
             Player aiPlayer = gameState.getCurrentPlayer();
             aiPlayer.setGameState(gameState);
             int[] choice = aiPlayer.chooseCardToFlip();
@@ -159,15 +159,30 @@ public class Main {
             }
         }
 
-        private void checkAndCollectTrio() {
+        private void checkAndCollectTrio() throws InterruptedException {
             Player currentPlayer = gameState.getCurrentPlayer();
             if (TrioChecker.isBasicTrio(gameState.getCurrentFlip())) {
-                System.out.println(currentPlayer.getName() + " collected a Trio!");
+                
+                int trioNumber = gameState.getCurrentFlip().get(0).getNumber();
+                String message = currentPlayer.getName() + " collected a TRIO of " + trioNumber + "s!";
+                
+                System.out.println(message);
+                
+                gameState.lastMoveDescription = message;
+                
+                // --- THIS IS THE NEW DELAY LOGIC ---
+                // Pause for a moment to celebrate the Trio!
+                // We pause for a longer duration for this special event.
+                Thread.sleep(1500); // Pause for 1.5 seconds
+                // --- END OF NEW LOGIC ---
+
                 java.util.List<Card> collectedTrio = new java.util.ArrayList<>(gameState.getCurrentFlip());
                 gameState.getCurrentFlip().clear();
                 currentPlayer.collectTrio(collectedTrio);
                 if (TrioChecker.hasWinningCondition(currentPlayer.getTrio())) {
                     gameState.winner = currentPlayer;
+                    // If a player wins, we can add an even longer pause to build suspense.
+                    Thread.sleep(1000); // Extra 1 second pause on win
                 }
             }
         }

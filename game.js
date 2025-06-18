@@ -151,47 +151,70 @@ function updateUI(gameState) {
     }
 }
 
+// in game.js
+
+// in game.js
+
 function createPlayerSection(player, playerIndex) {
     const section = document.createElement('div');
     section.className = 'player-section';
+    
     const title = document.createElement('h3');
     title.textContent = player.name;
     section.appendChild(title);
-    const handContainer = document.createElement('div');
-    handContainer.className = 'container hand-display';
-    section.appendChild(handContainer);
+    
+    // This is the main flex container for the row: <MIN> <CONTENT> <MAX>
+    const handDisplayContainer = document.createElement('div');
+    handDisplayContainer.className = 'hand-display'; 
+    section.appendChild(handDisplayContainer);
+    
     if (player.hand.length === 0) {
-        handContainer.textContent = 'No cards in hand.';
+        handDisplayContainer.textContent = 'No cards in hand.';
         return section;
     }
+
+    // --- Create the three parts of the layout ---
+    const minCard = player.hand[0];
+    const maxCard = player.hand[player.hand.length - 1];
+
+    // Part 1: The MIN button (always exists if hand is not empty)
+    const minButton = createCardDiv(minCard, (playerIndex === 0 ? 'player-action' : 'ai-action'), playerIndex, 1);
+
+    // Part 2: The middle content (either hand cards or AI info)
+    const middleContent = document.createElement('div');
+    middleContent.className = 'hand-content';
+
     if (playerIndex === 0) {
+        // Human player: Show all cards in the middle
         section.classList.add('is-human-player');
         player.hand.forEach(card => {
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card';
             cardDiv.textContent = `${card.number}`;
-            handContainer.appendChild(cardDiv);
+            middleContent.appendChild(cardDiv);
         });
-        const actionContainer = document.createElement('div');
-        actionContainer.className = 'container action-buttons';
-        const minCard = player.hand[0];
-        const maxCard = player.hand[player.hand.length - 1];
-        const minButton = createCardDiv(minCard, 'player-action', playerIndex, 1);
-        actionContainer.appendChild(minButton);
-        if (player.hand.length > 1) {
-            const maxButton = createCardDiv(maxCard, 'player-action', playerIndex, 2);
-            actionContainer.appendChild(maxButton);
-        }
-        section.appendChild(actionContainer);
     } else {
-        title.textContent += ` (${player.hand.length} cards)`;
-        const minButton = createCardDiv(null, 'ai-action', playerIndex, 1);
-        handContainer.appendChild(minButton);
-        if (player.hand.length > 1) {
-            const maxButton = createCardDiv(null, 'ai-action', playerIndex, 2);
-            handContainer.appendChild(maxButton);
-        }
+        // AI player: Show card count in the middle
+        const aiInfo = document.createElement('span');
+        aiInfo.textContent = `(${player.hand.length} cards in hand)`;
+        middleContent.appendChild(aiInfo);
     }
+
+    // Part 3: The MAX button (only exists if there's more than one card)
+    let maxButton = null;
+    if (player.hand.length > 1) {
+        maxButton = createCardDiv(maxCard, (playerIndex === 0 ? 'player-action' : 'ai-action'), playerIndex, 2);
+    } else {
+        // Create an empty placeholder to maintain the space-between layout
+        maxButton = document.createElement('div');
+        maxButton.style.width = minButton.style.minWidth || '80px'; // Match width of min button
+    }
+
+    // --- Assemble the layout: MIN, CONTENT, MAX ---
+    handDisplayContainer.appendChild(minButton);
+    handDisplayContainer.appendChild(middleContent);
+    handDisplayContainer.appendChild(maxButton);
+
     return section;
 }
 

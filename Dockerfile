@@ -12,6 +12,7 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 COPY index.html ./
 COPY game.js ./
+COPY images/ ./images/
 COPY --from=builder /app/out/ .
 EXPOSE 8080
 CMD ["java", "-cp", ".", "Main"]

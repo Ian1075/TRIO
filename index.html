@@ -6,66 +6,180 @@
     <!-- index.html -->
     <!-- in index.html -->
     <style>
-        body { font-family: sans-serif; transition: background-color 0.5s; }
-        .container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; align-items: center; }
-        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        body { 
+            font-family: 'Poppins', sans-serif;
+            
+            /* --- NEW: Set background image --- */
+            background-image: url('/images/background.jpg');
+            background-size: cover; /* Make the image cover the entire screen */
+            background-position: center;
+            background-attachment: fixed; /* Keep the background fixed while scrolling */
+            
+            color: #333;
+            margin: 0;
+            padding: 24px;
+            transition: background-color 0.5s; 
+        }
+    
+        h1, h2, h3 {
+            text-align: center;
+            color: #343a40;
+        }
+    
+        hr {
+            border: 0;
+            height: 1px;
+            background: #dee2e6;
+            margin: 30px 0;
+        }
+    
+        /* Main Container for Centering Content */
+        .container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            margin-bottom: 10px; 
+            justify-content: center; 
+            align-items: center; 
+        }
+    
+        /* Card Base Styles */
         .card { 
-            border: 1px solid black; 
+            border: 1px solid #adb5bd; 
             padding: 10px 15px; 
-            border-radius: 5px; 
+            border-radius: 8px; 
             background-color: #f0f0f0; 
-            transition: opacity 0.3s, background-color 0.3s;
+            transition: opacity 0.3s, background-color 0.3s, transform 0.2s, border-color 0.2s;
             min-width: 80px;
             text-align: center;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         
+        /* Actionable Cards (Buttons, etc.) */
         .card.actionable {
             cursor: pointer;
             border-color: #007bff;
             border-width: 2px;
         }
         .card.actionable:hover { 
-            background-color: #e0e0e0;
+            background-color: #e9ecef;
             border-color: #0056b3;
+            transform: translateY(-2px); /* Slight lift effect on hover */
         }
         
         .card.face-down { 
-            background-color: #a0a0ff;
-            border-color: #6c757d;
+            background-color: #6c757d;
+            border-color: #5a6268;
+            color: white;
         }
-        .card.placeholder {
-            background-color: #f8f9fa;
-            border-style: dashed;
-            color: #6c757d;
+        .card.face-down:hover {
+            background-color: #5a6268;
         }
-
+    
+        /* Player Section Styles */
         .player-section {
-            border: 1px solid #ddd;
+            border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
+            padding: 15px 20px;
+            margin: 10px auto; /* Reduced margin */
+            width: 90%; /* Increased width for more space */
+            max-width: 900px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            /* Make the section itself a flex container to align its children (title, hand) */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
+    
         .player-section.is-human-player {
-            background-color: #e8f5e9; /* Give the human player a different background */
+            background-color: #e8f5e9;
+            border-color: #c8e6c9;
+        }
+    
+        /* Hand Display Styles */
+        .hand-display {
+            display: flex;
+            width: 100%;
+            justify-content: space-between; /* The magic for alignment */
+            align-items: center;
+            gap: 10px;
+            min-height: 50px;
+        }
+    
+        .hand-display.is-human-player-hand {
+            justify-content: space-between; /* The magic for alignment */
+            width: 100%;
+        }
+    
+        /* Non-interactive cards in the human player's hand */
+        .hand-display .card {
+            cursor: default;
+            background-color: #fff;
+            border-color: #6c757d;
+            transform: none; /* No hover effect for these cards */
         }
 
-        #game-info { font-size: 1.2em; font-weight: bold; }
+        .hand-content {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            /* This will grow to take up available space in the middle */
+            flex-grow: 1; 
+        }
 
+        /* Non-interactive cards in the human player's hand */
+        .hand-content .card {
+            cursor: default;
+            background-color: #fff;
+            border-color: #6c757d;
+            transform: none; /* No hover effect for these cards */
+        }
+    
+        /* Human player's action buttons */
+        .player-section .player-button {
+            background-color: #28a745; /* Green background */
+            color: #000000;            /* MAKE THE TEXT WHITE for better contrast */
+            border-color: #218838;     /* Darker green border */
+            font-weight: 600;          /* Make text a bit bolder */
+        }
+
+        /* Also use a more specific selector for the hover state */
+        .player-section .player-button:hover {
+            background-color: #218838 !important; /* Darker green on hover */
+            color: #000000 !important;            /* EXPLICITLY keep the text white on hover */
+            border-color: #1c7430 !important;
+        }
+    
+        /* Game Info and Log Styles */
+        #game-info { 
+            font-size: 1.2em; 
+            font-weight: bold; 
+            text-align: center;
+        }
+    
         #game-log-container {
-        background-color: #fffbe6; /* Light yellow background */
-        border: 1px solid #ffeeba;
-        padding: 5px 15px;
-        border-radius: 5px;
-        margin-top: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 900px;
         }
-
+    
         #last-move-text {
             font-style: italic;
             color: #555;
+            text-align: center;
+            margin: 5px 0;
         }
-        /* in index.html, inside <style> */
-
+    
+        /* Game Over Screen Styles */
         #game-over-screen {
             display: flex;
             flex-direction: column;
@@ -74,7 +188,7 @@
             height: 80vh;
             text-align: center;
         }
-
+    
         #restart-button {
             font-size: 1.5em;
             padding: 15px 30px;
@@ -84,8 +198,9 @@
             background-color: #fff;
             color: #007bff;
             transition: background-color 0.2s, color 0.2s;
+            margin-top: 20px;
         }
-
+    
         #restart-button:hover {
             background-color: #007bff;
             color: #fff;
