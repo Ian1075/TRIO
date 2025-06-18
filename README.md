@@ -1,1 +1,91 @@
-# TRIO
+# TRIO 回憶三重奏 - 卡牌記憶遊戲
+
+這是一款由 Java 為主打造的多人卡牌遊戲。(目前只有單人玩家vs.電腦的版本)
+
+**[點擊這裡訪問線上遊戲！](https://trio-t92k.onrender.com/)** 
+*(請注意：由於使用 Render 免費方案，網站首次載入時可能會因服務休眠而需要約 30-60 秒的冷啟動時間，請耐心等待 ❤️。)*
+
+---
+
+## ✨ 專案亮點 (Features)
+
+*   **純 Java 後端:** 整個後端完全基於 Java SE，不依賴任何外部框架，深入理解了 Java Web 服務的底層原理。
+*   **動態網頁介面:** 使用 JavaScript、HTML 和 CSS 打造了一個可與後端即時通訊的互動式前端。
+*   **智慧 AI 對手:** 包含了具有簡單決策樹邏輯的 AI 玩家，能夠分析牌面並做出有策略的選擇。
+*   **雲端部署實踐:** 透過 Docker 容器化技術，成功將一個傳統的 Java 應用部署到了現代化的雲端平台 (Render) 上，實現了公開訪問。
+*   **非同步遊戲流程:** 將原本同步的主控台迴圈，重構為基於 HTTP 請求-回應的非同步模式，並在前端實現了 AI 回合的分步視覺化。
+
+---
+
+## 🛠️ 使用技術 (Tech Stack)
+
+*   **後端 (Backend):**
+    *   Java
+*   **前端 (Frontend):**
+    *   HTML5
+    *   CSS3
+    *   JavaScript (ES6+)
+*   **部署 (Deployment):**
+    *   Docker
+    *   Render (雲端託管平台)
+*   **版本控制 (Version Control):**
+    *   Git & GitHub
+
+---
+
+## 🚀 如何在本機運行 (How to Run Locally)
+
+如果你想在自己的電腦上運行這個專案，請遵循以下步驟：
+
+1.  **前置需求:**
+    *   安裝 [Git](https://git-scm.com/)
+    *   安裝 [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/downloads/) 版本 17 或更高。
+
+2.  **克隆倉庫:**
+    打開你的終端機，執行以下命令：
+    ```bash
+    git clone https://github.com/Ian1075/TRIO.git
+    ```
+
+3.  **進入專案目錄:**
+    ```bash
+    cd TRIO
+    ```
+
+4.  **編譯所有 Java 原始碼:**
+    此命令會讀取 `src` 目錄下的所有 `.java` 檔案，並將編譯好的 `.class` 檔案輸出到專案根目錄。
+    ```bash
+    javac -d . src/game/*.java src/players/*.java src/Main.java
+    ```
+
+5.  **運行伺服器:**
+    ```bash
+    java -cp . Main
+    ```
+
+6.  **開始遊戲:**
+    *   打開你的網頁瀏覽器，訪問 `http://localhost:8080`。
+    *   若想讓同一 Wi-Fi 網路下的其他裝置（如手機）一起玩，請先找到你電腦的區域網路 IP 位址，然後訪問 `http://你的IP位址:8080`。
+
+---
+
+## 📜 遊戲規則 (Game Rules)
+
+> 以下為四人版個人戰的規則，其他版本仍在開發中，敬請期待😃。
+
+### 遊戲道具
+* 數字 1 ~ 12 的卡牌各三張。
+### 遊戲設置
+* 將卡牌洗牌，發給每位玩家只有自己能看到的 7 張手排。
+* 剩下的 8 張牌面朝下蓋在桌面上作為暗牌。
+### 遊戲進行
+* 
+
+---
+
+## 📝 未來展望 (Future Improvements)
+
+*   [ ] 優化 UI/UX，加入更豐富的動畫效果。
+*   [ ] 新增聊天室功能。
+*   [ ] 設計更困難的 AI 挑戰模式。
+*   [ ] 將遊戲狀態持久化，支援斷線重連。
