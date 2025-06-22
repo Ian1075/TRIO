@@ -44,11 +44,7 @@ async function performAiStep() {
 }
 
 async function restartGame() {
-    // We can't update the UI yet because it doesn't exist.
-    // So we first rebuild the basic UI structure.
     rebuildGameUI();
-    
-    // Now that the UI skeleton is back, we can show a loading message.
     const infoSpan = document.getElementById('current-player-name');
     if(infoSpan) {
         infoSpan.textContent = "Restarting game, please wait...";
@@ -58,12 +54,9 @@ async function restartGame() {
     try {
         const response = await fetch(url, { method: 'POST' });
         if (!response.ok) throw new Error('Restart failed');
-        
-        const newGameState = await response.json();
-        
-        // The UI skeleton is already there, now we just fill it with data.
-        updateUI(newGameState);
 
+        const newGameState = await response.json();
+        updateUI(newGameState);
     } catch (error) {
         console.error('Failed to restart game:', error);
         alert("Could not restart the game. Please check the console and refresh the page.");
@@ -71,7 +64,6 @@ async function restartGame() {
 }
 
 function rebuildGameUI() {
-    // This function creates the basic skeleton of our game page.
     document.body.innerHTML = `
         <h1>Card Game</h1>
         <div id="game-info">
@@ -91,36 +83,35 @@ function rebuildGameUI() {
 }
 
 function updateUI(gameState) {
-    // First, check if the necessary elements exist. If not, it means we need to rebuild.
-    // This is a safety check for the restart process.
+    console.log('Game state updated:', gameState);
+    
     if (!document.getElementById('players-container')) {
         rebuildGameUI();
     }
-    
+
     setLoadingState(false);
     clearTimeout(aiTurnTimer);
 
     if (gameState.winner) {
         const gameOverScreen = document.createElement('div');
         gameOverScreen.id = 'game-over-screen';
-        
+
         const winnerMessage = document.createElement('h1');
         winnerMessage.textContent = `Game Over! Winner is: ${gameState.winner}`;
-        
+
         const restartButton = document.createElement('button');
         restartButton.id = 'restart-button';
         restartButton.textContent = 'Play Again';
-        restartButton.onclick = restartGame; // This is where the magic happens
-        
+        restartButton.onclick = restartGame;
+
         gameOverScreen.appendChild(winnerMessage);
         gameOverScreen.appendChild(restartButton);
-        
+
         document.body.innerHTML = ''; 
         document.body.appendChild(gameOverScreen);
         return;
     }
 
-    // The rest of the updateUI function remains the same...
     const lastMoveElement = document.getElementById('last-move-text');
     if (gameState.lastMoveDescription) {
         lastMoveElement.textContent = gameState.lastMoveDescription;
@@ -151,45 +142,36 @@ function updateUI(gameState) {
     }
 }
 
-// in game.js
-
-// in game.js
-
-// in game.js
-
 function createPlayerSection(player, playerIndex) {
     const section = document.createElement('div');
     section.className = 'player-section';
-    
+
     const title = document.createElement('h3');
     title.textContent = player.name;
     section.appendChild(title);
-    
-    // Container for the visual hand display
+
     const handDisplayContainer = document.createElement('div');
     handDisplayContainer.className = 'hand-display'; 
     section.appendChild(handDisplayContainer);
-    
+
     if (player.hand.length === 0) {
         handDisplayContainer.textContent = 'No cards in hand.';
         return section;
     }
 
-    if (playerIndex === 0) { // Human player
+    if (playerIndex === 0) {
         section.classList.add('is-human-player');
-        
+
         player.hand.forEach(card => {
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card';
-            // Set the background image for the card front
             cardDiv.style.backgroundImage = `url('/images/card-${card.number}.png')`;
             handDisplayContainer.appendChild(cardDiv);
         });
 
-        // Container for action buttons, separate from the hand
         const actionContainer = document.createElement('div');
         actionContainer.className = 'action-buttons-container';
-        
+
         const minCard = player.hand[0];
         const maxCard = player.hand[player.hand.length - 1];
         const minButton = createCardDiv(minCard, 'player-action', playerIndex, 1);
@@ -200,18 +182,19 @@ function createPlayerSection(player, playerIndex) {
             actionContainer.appendChild(maxButton);
         }
         section.appendChild(actionContainer);
-        
-    } else { // AI player
+    } else {
         title.textContent += ` (${player.hand.length} cards)`;
-        for(let i = 0; i < player.hand.length; i++) {
+
+        const overlapOffset = 90;
+        for (let i = 0; i < player.hand.length; i++) {
             const cardDiv = document.createElement('div');
-            cardDiv.className = 'card card-back'; // All AI cards show the back
-            // Overlap them slightly for a fanned-out look
-            cardDiv.style.marginLeft = (i > 0) ? '-60px' : '0';
+            cardDiv.className = 'card face-down';
+            cardDiv.style.position = 'center';
+            cardDiv.style.left = `${i * overlapOffset}px`;
+            handDisplayContainer.style.width = `${(player.hand.length - 1) * overlapOffset + 150}px`;
             handDisplayContainer.appendChild(cardDiv);
         }
-        
-        // AI action buttons (optional, could be removed for cleaner look)
+
         const actionContainer = document.createElement('div');
         actionContainer.className = 'action-buttons-container';
         const minButton = createCardDiv(null, 'ai-action', playerIndex, 1);
@@ -222,40 +205,68 @@ function createPlayerSection(player, playerIndex) {
         }
         section.appendChild(actionContainer);
     }
+
+    const trios = player.trios || player.trio;
+    if (trios && trios.length > 0) {
+        const trioContainer = document.createElement('div');
+        trioContainer.className = 'trio-display';
+
+        const label = document.createElement('p');
+        label.textContent = 'TRIOs Collected:';
+        label.style.fontWeight = 'bold';
+        label.style.marginBottom = '8px';
+        trioContainer.appendChild(label);
+
+        trios.forEach(trio => {
+            const trioGroup = document.createElement('div');
+            trioGroup.style.display = 'inline-flex';
+            trioGroup.style.marginRight = '12px';
+
+            trio.forEach(card => {
+                const number = typeof card === 'number' ? card : card.number;
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.style.backgroundImage = `url('/images/card-${number}.png')`;
+                trioGroup.appendChild(cardDiv);
+            });
+
+            trioContainer.appendChild(trioGroup);
+        });
+
+        section.appendChild(trioContainer);
+    }
+
     return section;
 }
 
-// in game.js
-
 function createCardDiv(card, type, source, choice) {
     const div = document.createElement('div');
-    div.className = 'card'; // Base class for card look
+    div.className = 'card';
 
     switch (type) {
         case 'table':
             div.classList.add('actionable', 'face-down');
             div.onclick = () => performPlayerAction(source, choice);
             break;
-        
+
         case 'player-action':
-            // These are now separate buttons, not cards.
-            div.className = 'actionable action-button'; // Use new button classes
-            if (choice === 1) { // MIN
+            div.className = 'actionable action-button';
+            if (choice === 1) {
                 div.classList.add('min-button');
                 div.textContent = `Flip My MIN`;
-            } else { // MAX
+            } else {
                 div.classList.add('max-button');
                 div.textContent = `Flip My MAX`;
             }
             div.onclick = () => performPlayerAction(source, choice);
             break;
-            
+
         case 'ai-action':
             div.className = 'actionable action-button';
-             if (choice === 1) { // MIN
+            if (choice === 1) {
                 div.classList.add('min-button');
                 div.textContent = `Flip MIN`;
-            } else { // MAX
+            } else {
                 div.classList.add('max-button');
                 div.textContent = `Flip MAX`;
             }
